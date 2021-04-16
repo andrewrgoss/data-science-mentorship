@@ -1,1 +1,1 @@
-# data-science-mentorship
+TODO: add details
