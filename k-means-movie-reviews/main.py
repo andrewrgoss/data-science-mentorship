@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.cluster import KMeans
-from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import TfidfVectorizer
 import sys
 
@@ -50,12 +50,11 @@ def clean_text(raw_text):
     # stemming
     stemmed_words = [stemming.stem(w) for w in token_words]
 
-    # # remove stop words and duplicates
-    # meaningful_words = [w for w in stemmed_words if w not in stops]
-    # meaningful_words = list(OrderedDict.fromkeys(meaningful_words))
+    # remove stop words
+    meaningful_words = [w for w in stemmed_words if w not in stops]
 
     # rejoin meaningful stemmed words
-    joined_words = (' '.join(stemmed_words))
+    joined_words = (' '.join(meaningful_words))
 
     # return cleaned data
     return joined_words
@@ -75,19 +74,36 @@ def main():
     for line in movie_review_data:
         flattened_movie_review_data.extend(line.split(' '))
 
-    # create dataframe
+    # create initial dataframe
     df = pd.DataFrame(flattened_movie_review_data, columns=['movie_review_words'])
-    # df = df.drop_duplicates('movie_review_words')
+
+    # get frequency count of words based on grouped column values
+    df = df.apply(pd.Series.value_counts).fillna(0)
+
+    # get top 5 percent of words
+    df = df.head(int(len(df) * (5 / 100)))
+
+    # convert index (word) values to new dataframe
+    df = pd.DataFrame(list(df.index.values), columns=['movie_review_words'])
+
     desc = df['movie_review_words'].values
-
-    # TODO: identify number of times unique token appears
-    # TODO: limit to top 5% that occur in no more than 10%, reduce dimensionality
-    #  - we care about less things and what is left indicates key categories (trimming step needed)
-
-    # remove stop words
-    vectorizer = TfidfVectorizer(stop_words=stops)
-
+    vectorizer = TfidfVectorizer()
     x = vectorizer.fit_transform(desc)
+
+    # principal component analysis (pca) - reduce dimensionality
+    pca = PCA()
+
+    # TODO: error - pca does not support sparse input. see truncatedsvd for a possible alternative
+    pca.fit_transform(x)
+    pca_variance = pca.explained_variance_
+
+    plt.figure(figsize=(8, 6))
+    plt.bar(range(22), pca_variance, alpha=0.5, align='center', label='individual variance')
+    plt.legend()
+    plt.ylabel('Variance ratio')
+    plt.xlabel('Principal components')
+    plt.show()
+
     wcss = []
 
     for i in range(1, 2):
@@ -101,49 +117,6 @@ def main():
     plt.savefig('elbow.png')
     plt.show()
 
-    # distortions = []
-    # k_range = range(1, 10)
-    # for k in k_range:
-    #     kmean_model = KMeans(n_clusters=k)
-    #     kmean_model.fit(df)
-    #     distortions.append(kmean_model.inertia_)
-    #
-    # plt.figure(figsize=(16, 8))
-    # plt.plot(k_range, distortions, 'bx-')
-    # plt.xlabel('k')
-    # plt.ylabel('Distortion')
-    # plt.title('The Elbow Method showing the optimal k')
-    # plt.show()
-    #
-    # # determine number of clusters using elbow method
-    # vectorizer = CountVectorizer()
-    # x = vectorizer.fit_transform(movie_review_words)
-    # print(vectorizer.get_feature_names())
-    # print(x.toarray())
-    #
-    # # visualize where 'elbow' forms
-    # sum_of_squared_distances = []
-    # k = range(2, 10)
-    # for k in k:
-    #     km = KMeans(n_clusters=k, max_iter=200, n_init=10)
-    #     km = km.fit(x)
-    #     sum_of_squared_distances.append(km.inertia_)
-    # plt.plot(k, sum_of_squared_distances, 'bx-')
-    # plt.xlabel('k')
-    # plt.ylabel('Sum_of_squared_distances')
-    # plt.title('Elbow Method For Optimal k')
-    # plt.show()
-
-
-    # df = pd.DataFrame(data, columns=['line'])
-    # print(df.head())
-    # print(df)
-
-    # df = pd.read_csv('./review_polarity/txt_sentoken/neg/cv000_29416.txt', header=None)
-    # df.head()
-
-    # df = pd.concat(map(pd.read_csv, glob.glob(os.path.join('./review_polarity/txt_sentoken/neg/', "*.txt"))))
-    # df.head()
 
 try:
     main()
