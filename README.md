@@ -6,26 +6,26 @@ Completed 3-month data science mentorship with a focus on understanding the conc
 * Domain Expertise, Importance of Descriptives
 * Reduction of Error
 
-OLS 1
+### OLS 1
 * Fundamental structure and components
 * Coefficients, Standard Errors, Significance, R2
 * Multivariate, Adjusted-R2
 * Functions
 * Running model and reading output
 
-OLS 2
+### OLS 2
 * OLS in Python
 * Understanding output
 * Recoding, Dummy, Interactive Terms
 * Stepwise
 
-OLS 3
+### OLS 3
 * Assumptions/Requirements
 * Diagnostics
 * Model building and analysis
 * Visual
 
-Non-parametric 1
+### Non-parametric 1
 * Binary outcomes
 * MLE
 * Assumptions/Requirements
@@ -33,27 +33,27 @@ Non-parametric 1
 * Type 1, Type 2 Errors
 * Prediction Matrix
 
-OLS Modeling Philosophy 101
+### OLS Modeling Philosophy 101
 * Hands-on exercise
 
-Non-parametric 2
+### Non-parametric 2
 * Philosophy 101
 * Assumptions/Requirements
 * Ordinal/Categorical
 * Constrained/Hazard
 * Time
 
-Text Analytics 1
+### Text Analytics 1
 * Fundamental structure
 * Approaches
 * Practical application – MeSH
 
-Text Analytics 2
+### Text Analytics 2
 * Clustering
 * Analysis and visualization
 * https://www.datarobot.com/blog/multiple-regression-using-statsmodels
 
-Movie Review Data
+### Movie Review Data
 * Hands-on exercise
 * Data - http://www.cs.cornell.edu/people/pabo/movie-review-data/ (polarity dataset v2.0)
 * Python - https://scikit-learn.org/stable/ 
@@ -72,6 +72,6 @@ Movie Review Data
 * https://towardsdatascience.com/visualization-of-word-embedding-vectors-using-gensim-and-pca-8f592a5d3354
 * https://towardsdatascience.com/explaining-k-means-clustering-5298dc47bad6
 
-Real-world examples
+### Real-world examples
 * Clustering
 * Classification Project
