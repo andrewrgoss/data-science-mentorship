@@ -80,7 +80,9 @@ def main():
     # get frequency count of words based on grouped column values
     df = df.apply(pd.Series.value_counts).fillna(0)
 
-    # get top 5 percent of words
+    # get top 5 percent of words that appear in 10 percent of docs
+    # TODO: check for terms across all documents and only keep the ones that appear
+    #  in <=10 percent of docs (noise reduction technique)
     df = df.head(int(len(df) * (5 / 100)))
 
     # convert index (word) values to new dataframe
@@ -94,6 +96,7 @@ def main():
     pca = PCA()
 
     # TODO: error - pca does not support sparse input. see truncatedsvd for a possible alternative
+    # TODO: if PCA still does not work, truncatedsvd is another possible method
     pca.fit_transform(x)
     pca_variance = pca.explained_variance_
 
